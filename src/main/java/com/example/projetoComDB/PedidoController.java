@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/pedido")
 public class PedidoController {
 
@@ -82,3 +83,4 @@ public class PedidoController {
 
     }
 }
+
