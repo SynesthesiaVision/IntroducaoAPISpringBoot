@@ -1,9 +1,10 @@
 package com.example.projetoComDB;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="TB_ITENS")
+@Table(name = "TB_ITENS")
 public class Item {
 
     @Id
@@ -11,6 +12,7 @@ public class Item {
     private Long id;
     private String name;
     private Long price;
+    @JsonManagedReference
     @ManyToOne
     private Pedido pedido;
 

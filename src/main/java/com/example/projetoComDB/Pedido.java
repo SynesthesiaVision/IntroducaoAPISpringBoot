@@ -1,5 +1,7 @@
 package com.example.projetoComDB;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -12,7 +14,9 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
+    @JsonManagedReference
     private User user;
+    @JsonBackReference
     @OneToMany(mappedBy = "pedido")
     private List<Item> itemList = new ArrayList<>();
 

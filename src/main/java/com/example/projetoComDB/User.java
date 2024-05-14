@@ -1,6 +1,7 @@
 package com.example.projetoComDB;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class User {
     private String name;
     private String password;
     private String email;
+    @JsonBackReference
     @OneToMany(mappedBy = "user")
     private List<Pedido> pedidoList = new ArrayList<>();
 
