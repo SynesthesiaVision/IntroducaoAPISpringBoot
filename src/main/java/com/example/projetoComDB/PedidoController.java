@@ -24,11 +24,11 @@ public class PedidoController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Pedido> createPedido(@RequestBody Pedido pedido, Long userId) {
+    public ResponseEntity<Pedido> createPedido(@RequestParam Long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(pedidoRepository.save(
-                new Pedido(pedido.getName(), userOptional.get())
-        ));
+        Pedido pedido = new Pedido();
+        pedido.setUser(userOptional.get());
+        return ResponseEntity.status(HttpStatus.OK).body(pedidoRepository.save(pedido));
     }
 
     @GetMapping("/{id}")
@@ -47,19 +47,6 @@ public class PedidoController {
         return ResponseEntity.status(HttpStatus.OK).body(pedidoRepository.findAll());
     }
 
-    @PostMapping("/update")
-    public ResponseEntity<Pedido> update(@RequestBody Pedido pedido) {
-        Optional<Pedido> pedidoOptional = pedidoRepository.findById(pedido.getId());
-        if (pedidoOptional.isPresent()) {
-            Pedido pedido1 = pedidoOptional.get();
-            pedido1.setName(pedido1.getName());
-            return ResponseEntity.status(HttpStatus.OK).body(pedidoRepository.save(pedido1));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         pedidoRepository.deleteById(id);
@@ -67,7 +54,7 @@ public class PedidoController {
     }
 
     @PostMapping("/addItem")
-    public ResponseEntity<?> addItem(@RequestBody Long pedidoId, Long itemId) {
+    public ResponseEntity<?> addItem(@RequestParam Long pedidoId, @RequestParam Long itemId) {
         Optional<Pedido> pedidoOptional = pedidoRepository.findById(pedidoId);
         Optional<Item> itemOptional = itemRepository.findById(itemId);
         pedidoOptional.get().addItem(itemOptional.get());
@@ -75,7 +62,7 @@ public class PedidoController {
     }
 
     @PostMapping("/removeItem")
-    public ResponseEntity<?> removeItem(@RequestBody Long pedidoId, Long itemId) {
+    public ResponseEntity<?> removeItem(@RequestParam Long pedidoId, @RequestParam Long itemId) {
         Optional<Pedido> pedidoOptional = pedidoRepository.findById(pedidoId);
         Optional<Item> itemOptional = itemRepository.findById(itemId);
         pedidoOptional.get().removeItem(itemOptional.get());
