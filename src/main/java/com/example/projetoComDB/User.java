@@ -2,13 +2,14 @@ package com.example.projetoComDB;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="TB_USER")
+@Table(name = "TB_USER")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,7 +17,6 @@ public class User {
     private String name;
     private String password;
     private String email;
-    @JsonBackReference
     @OneToMany(mappedBy = "user")
     private List<Pedido> pedidoList = new ArrayList<>();
 
@@ -41,11 +41,31 @@ public class User {
         this.name = name;
     }
 
-    public String getPassword() {return password;}
+    public String getPassword() {
+        return password;
+    }
 
-    public void setPassword(String password) {this.password = password;}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-    public String getEmail() {return email;}
+    public List<Pedido> getPedidoList() {
+        return pedidoList;
+    }
 
-    public void setEmail(String email) {this.email = email;}
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void addPedido(Pedido pedido) {
+        this.pedidoList.add(pedido);
+    }
+
+    public void removePedido(Pedido pedido) {
+        this.pedidoList.remove(pedido);
+    }
 }

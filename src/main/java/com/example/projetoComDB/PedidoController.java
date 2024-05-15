@@ -28,7 +28,11 @@ public class PedidoController {
         Optional<User> userOptional = userRepository.findById(userId);
         Pedido pedido = new Pedido();
         pedido.setUser(userOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body(pedidoRepository.save(pedido));
+        userOptional.get().addPedido(pedido);
+
+        pedidoRepository.save(pedido);
+        userRepository.save(userOptional.get());
+        return ResponseEntity.status(HttpStatus.OK).body(pedido);
     }
 
     @GetMapping("/{id}")
@@ -58,6 +62,8 @@ public class PedidoController {
         Optional<Pedido> pedidoOptional = pedidoRepository.findById(pedidoId);
         Optional<Item> itemOptional = itemRepository.findById(itemId);
         pedidoOptional.get().addItem(itemOptional.get());
+        itemOptional.get().addPedido(pedidoOptional.get());
+        itemRepository.save(itemOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body(pedidoRepository.save(pedidoOptional.get()));
     }
 
@@ -66,6 +72,10 @@ public class PedidoController {
         Optional<Pedido> pedidoOptional = pedidoRepository.findById(pedidoId);
         Optional<Item> itemOptional = itemRepository.findById(itemId);
         pedidoOptional.get().removeItem(itemOptional.get());
+
+        itemOptional.get().removePedido(pedidoOptional.get());
+        itemRepository.save(itemOptional.get());
+
         return ResponseEntity.status(HttpStatus.OK).body(pedidoRepository.save(pedidoOptional.get()));
 
     }

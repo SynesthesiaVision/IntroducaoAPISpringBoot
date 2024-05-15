@@ -1,7 +1,10 @@
 package com.example.projetoComDB;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "TB_ITENS")
@@ -11,12 +14,12 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    private Long price;
-    @JsonManagedReference
-    @ManyToOne
-    private Pedido pedido;
+    private Float price;
 
-    public Item(String name, Long price) {
+    @ManyToMany
+    private List<Pedido> pedidoList = new ArrayList<>();
+
+    public Item(String name, Float price) {
         this.name = name;
         this.price = price;
     }
@@ -32,27 +35,29 @@ public class Item {
         this.name = name;
     }
 
-    public Long getPrice() {
+    public Float getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 
-    public Pedido getPedido() {
-        return pedido;
+    @JsonIgnore
+    public List<Pedido> getPedido() {
+        return this.pedidoList;
     }
 
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
+    public void addPedido(Pedido pedido) {
+        this.pedidoList.add(pedido);
+    }
+
+    public void removePedido(Pedido pedido) {
+        this.pedidoList.remove(pedido);
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

@@ -1,23 +1,21 @@
 package com.example.projetoComDB;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="TB_PEDIDO")
+@Table(name = "TB_PEDIDO")
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
-    @JsonManagedReference
     private User user;
-    @JsonBackReference
-    @OneToMany(mappedBy = "pedido")
+    @ManyToMany
     private List<Item> itemList = new ArrayList<>();
 
     public Pedido() {
@@ -25,6 +23,8 @@ public class Pedido {
 
     public Pedido(String name, User user) {
     }
+
+    @JsonIgnore
     public User getUser() {
         return user;
     }
@@ -48,10 +48,12 @@ public class Pedido {
     public void setId(Long id) {
         this.id = id;
     }
-    public void addItem(Item item){
+
+    public void addItem(Item item) {
         this.itemList.add(item);
     }
-    public void removeItem(Item item){
+
+    public void removeItem(Item item) {
         this.itemList.remove(item);
     }
 }
